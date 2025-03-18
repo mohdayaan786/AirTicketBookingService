@@ -29,8 +29,7 @@ class BookingService {
             const booking = await this.bookingRepository.create(bookingPayload);
             const updateFlightRequestUrl = `${FlightServicePath}/api/v1/flight/${flightId}`;
             const remainingSeats = flightData.totalSeats - booking.noOfSeats; // 396 - 2 = 394
-            console.log("REMAINING SEATS:", remainingSeats);
-            await axios.patch(updateFlightRequestUrl, { totalSeats: flightData.totalSeats - booking.noOfSeats })
+            await axios.patch(updateFlightRequestUrl, { totalSeats: remainingSeats });
             const updatedBooking = await this.bookingRepository.update(Number(booking.id), { status: 'Completed' });
             return updatedBooking;
 
@@ -44,6 +43,21 @@ class BookingService {
                 error.response?.status || 500
             );
 
+        }
+    }
+
+    async updateBooking(bookingId, data) {  
+        try {
+            const booking = await this.bookingRepository.update(bookingId, data);
+            return booking;
+        } catch (error) {
+            console.error("Error occurred in updateBooking:", error.message);
+            throw new ServiceError(
+                'Service error',
+                'An error occurred while updating the booking',
+                error.message || 'Booking update failed',
+                error.response?.status || 500
+            );
         }
     }
 }

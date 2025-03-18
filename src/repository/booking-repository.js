@@ -1,6 +1,8 @@
 const { Booking } = require('../models/index');
 const { StatusCodes } = require('http-status-codes');
 const { AppError, ValidationError } = require('../utils/errors/index');
+const { FlightServicePath } = require('../config/server-config');
+const axios = require('axios');
 
 class BookingRepository {
     async create(data) {
@@ -30,11 +32,21 @@ class BookingRepository {
                     StatusCodes.NOT_FOUND
                 );
             }
-            if (data.status) {
-                booking.status = data.status;
+
+            booking.status = data.status;
+            if (data.status === 'Cancelled') {
+                booking.totalCost = 0;
+                const flightId = booking.flightId;
+                const getFlightRequestUrl = `${FlightServicePath}/api/v1/flight/${flightId}`;
+                const response = await axios.get(getFlightRequestUrl);
+                const flightData = response.data.data;
+                const updateFlightRequestUrl = `${FlightServicePath}/api/v1/flight/${flightId}`;
+                const freeSeats = flightData.totalSeats + booking.noOfSeats;
+                await axios.patch(updateFlightRequestUrl, { totalSeats: freeSeats });
             }
             await booking.save();
             return booking;
+
         } catch (error) {
             if (error.name === 'SequelizeValidationError') {
                 throw new ValidationError(error);
