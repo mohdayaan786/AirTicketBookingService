@@ -1,18 +1,26 @@
 const express = require('express');
 const router = express.Router();
-const { BookingController } = require('../../controllers/index');
+const {BookingController}  = require('../../controllers/index');
 const {updateValidator, createValidator} = require('../../middlewares/index');
+// const {createChannel} = require('../../utils/message-queue');
+
+// const channel = await createChannel();
+const bookingController = new BookingController();
 
 
 router.post(
     '/bookings', 
     createValidator.createValidator,
-    BookingController.create
+    bookingController.create
 );
 router.patch(
     '/bookings/:id', 
     updateValidator.updateValidator,
-    BookingController.update
+    bookingController.update
+);
+router.post(
+    '/publish',
+    bookingController.sendMessageToQueue
 );
 
 module.exports = router;
