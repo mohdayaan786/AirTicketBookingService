@@ -30,7 +30,7 @@ const subscribeMessage = async (channel, service, bindingKey) => {
 
 const publishMessage = async (channel, bindingKey, message) => {
     try {
-        await channel.assertQueue('QUEUE_NAME');
+        await channel.assertQueue('REMINDER_QUEUE');
         await channel.publish(EXCHANGE_NAME, bindingKey, Buffer.from(message));
     } catch (err) {
         console.log(err);
