@@ -46,7 +46,7 @@ class BookingService {
         }
     }
 
-    async updateBooking(bookingId, data) {  
+    async updateBooking(bookingId, data) {
         try {
             const booking = await this.bookingRepository.update(bookingId, data);
             return booking;

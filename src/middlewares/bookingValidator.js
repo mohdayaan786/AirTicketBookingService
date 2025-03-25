@@ -1,5 +1,5 @@
-const updateValidator = (req, res, next) => {   
-    if(!req.body.status){
+const updateValidator = (req, res, next) => {
+    if (!req.body.status) {
         return res.status(400).json({
             data: {},
             success: false,
@@ -10,8 +10,8 @@ const updateValidator = (req, res, next) => {
     next();
 }
 
-const createValidator = (req, res, next) => {   
-    if(!req.body.flightId || !req.body.userId || !req.body.noOfSeats){
+const createValidator = (req, res, next) => {
+    if (!req.body.flightId || !req.body.userId || !req.body.noOfSeats) {
         return res.status(400).json({
             data: {},
             success: false,

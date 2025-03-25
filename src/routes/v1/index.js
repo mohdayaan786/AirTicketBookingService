@@ -1,20 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const {BookingController}  = require('../../controllers/index');
-const {updateValidator, createValidator} = require('../../middlewares/index');
-// const {createChannel} = require('../../utils/message-queue');
-
-// const channel = await createChannel();
+const { BookingController } = require('../../controllers/index');
+const { updateValidator, createValidator } = require('../../middlewares/index');
 const bookingController = new BookingController();
 
 
 router.post(
-    '/bookings', 
+    '/bookings',
     createValidator.createValidator,
     bookingController.create
 );
 router.patch(
-    '/bookings/:id', 
+    '/bookings/:id',
     updateValidator.updateValidator,
     bookingController.update
 );
@@ -24,7 +21,7 @@ router.post(
 );
 
 router.get(
-    '/check', 
+    '/check',
     (req, res) => {
         res.status(200).send('Booking Service is healthy');
     }

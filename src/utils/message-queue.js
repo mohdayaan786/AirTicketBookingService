@@ -1,14 +1,14 @@
 const amqplib = require('amqplib');
 const { EXCHANGE_NAME, MESSAGE_BROKER_URL } = require('../config/server-config');
 
-const createChannel = async () =>{
-    try{
+const createChannel = async () => {
+    try {
         const connection = await amqplib.connect(MESSAGE_BROKER_URL);
         const channel = await connection.createChannel();
         await channel.assertExchange(EXCHANGE_NAME, 'direct', false);
         return channel;
     }
-    catch(err){
+    catch (err) {
         console.log(err);
     }
 }
@@ -38,7 +38,7 @@ const publishMessage = async (channel, bindingKey, message) => {
 }
 
 module.exports = {
-  createChannel,
-  subscribeMessage,
-  publishMessage
+    createChannel,
+    subscribeMessage,
+    publishMessage
 };
