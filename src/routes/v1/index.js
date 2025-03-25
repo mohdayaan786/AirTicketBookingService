@@ -23,4 +23,11 @@ router.post(
     bookingController.sendMessageToQueue
 );
 
+router.get(
+    '/check', 
+    (req, res) => {
+        res.status(200).send('Booking Service is healthy');
+    }
+);
+
 module.exports = router;
